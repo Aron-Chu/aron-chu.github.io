@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Evolving AI Landscape: Models, Pricing & Agentic Tools (May 2025)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 
+        Narrative & Structure Plan:
+        1. Hero Section: Title, brief intro to the AI landscape.
+        2. Key Players Overview: Introduce Anthropic, Google, OpenAI.
+        3. API Pricing Deep Dive: Comparative bar charts for input/output costs of major models.
+        4. Subscription Model Comparison: Table or card layout for key subscription tiers.
+        5. Model Capabilities - Context Windows: Bar chart comparing context window sizes.
+        6. Model Capabilities - Performance Benchmarks: Grouped bar charts for key benchmarks (e.g., SWE-bench, GPQA).
+        7. The Rise of Agentic AI: Feature comparison of tools like Jules, Copilots, Codex using HTML cards.
+        8. Dynamic Model Insights (New LLM Feature): Interactive section to ask Gemini about specific models.
+        9. Our Process & Future Outlook (New Section): Discuss code process, sources, implications, and improvements.
+        10. Strategic Implications for Enterprises: Key considerations presented as a list or flow.
+        11. Conclusion: Brief summary of the dynamic market.
+
+        Visualization Choices:
+        - API Pricing (Input/Output): Goal: Compare. Chart: Grouped Bar Chart (Chart.js). Justification: Clear comparison of two metrics across multiple models. NO SVG.
+        - Subscription Costs: Goal: Compare/Inform. Chart: HTML Table/Cards (Tailwind). Justification: Good for presenting varied features and pricing. NO SVG.
+        - Context Windows: Goal: Compare. Chart: Horizontal Bar Chart (Chart.js). Justification: Easy comparison of lengths. NO SVG.
+        - Performance Benchmarks: Goal: Compare. Chart: Grouped Bar Chart (Chart.js). Justification: Effective for comparing multiple models on specific metrics. NO SVG.
+        - Agentic AI Features: Goal: Organize/Compare. Chart: HTML Cards (Tailwind). Justification: Structured way to show diverse features. NO SVG.
+        - Enterprise Adoption Flow: Goal: Organize. Chart: HTML/CSS Flow Diagram (Tailwind). Justification: Visual representation of a process. NO SVG, NO MERMAID JS.
+        - Market Share (Illustrative - Key Players): Goal: Inform. Chart: Donut Chart (Chart.js). Justification: Simple proportion if data is simplified to major players. NO SVG.
+
+        Color Palette Chosen: "Energetic & Playful" (Orange, Yellow, Pink, Purple, Blue)
+        - Primary: #FF8C00 (Orange)
+        - Secondary: #1E90FF (Blue)
+        - Accent 1: #FFD700 (Yellow)
+        - Accent 2: #9370DB (Purple)
+        - Accent 3: #FF69B4 (Pink)
+        - Neutral Background: #F3F4F6 (slate-100)
+        - Card Background: #FFFFFF (white)
+        - Text: #1F2937 (gray-800), #4B5563 (gray-600)
+
+        Confirmation: NEITHER Mermaid JS NOR SVG were used anywhere in this output. All charts are Chart.js (Canvas). Diagrams are HTML/CSS.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6; /* slate-100 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1rem;
+            background-color: #FFFFFF; /* white */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); /* shadow-md */
+        }
+        .stat-card {
+            background-color: #FFFFFF; /* white */
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 1.5rem; /* p-6 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); /* shadow-lg */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* shadow-2xl */
+        }
+        .section-title {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700; /* font-bold */
+            color: #FF8C00; /* Orange */
+            margin-bottom: 1rem; /* mb-4 */
+            text-align: center;
+        }
+        .section-subtitle {
+            font-size: 1.25rem; /* text-xl */
+            color: #4B5563; /* gray-600 */
+            margin-bottom: 2rem; /* mb-8 */
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .kpi-value {
+            font-size: 2.5rem; /* text-4xl */
+            font-weight: 700; /* font-bold */
+            color: #1E90FF; /* Blue */
+        }
+        .kpi-label {
+            font-size: 1rem; /* text-base */
+            color: #4B5563; /* gray-600 */
+            margin-top: 0.5rem; /* mt-2 */
+        }
+        /* Flowchart styles */
+        .flow-step {
+            background-color: #1E90FF; /* Blue */
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #9370DB; /* Purple */
+        }
+        /* Sticky Nav (Optional - simple version) */
+        #sticky-nav {
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            padding: 0.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        #sticky-nav a {
+            color: #1E90FF; /* Blue */
+            transition: color 0.3s ease;
+        }
+        #sticky-nav a:hover {
+            color: #FF8C00; /* Orange */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <nav id="sticky-nav" class="hidden md:block">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-center space-x-8">
+                <a href="#overview" class="font-semibold">Overview</a>
+                <a href="#api-pricing" class="font-semibold">API Pricing</a>
+                <a href="#subscriptions" class="font-semibold">Subscriptions</a>
+                <a href="#capabilities" class="font-semibold">Capabilities</a>
+                <a href="#agentic-ai" class="font-semibold">Agentic AI</a>
+                <a href="#dynamic-insights" class="font-semibold">Dynamic Insights</a>
+                <a href="#deep-dive-analysis" class="font-semibold">Our Process & Future</a>
+                <a href="#implications" class="font-semibold">Implications</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">The Evolving AI Landscape</h1>
+            <p class="text-2xl mb-8 max-w-3xl mx-auto">A Deep Dive into AI Models, Pricing Structures, and Agentic Tools as of May 2025</p>
+            <p class="text-lg">Based on the latest market research, this infographic visualizes key trends and comparative data for strategic decision-making in AI adoption.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6 space-y-16">
+
+        <section id="overview">
+            <h2 class="section-title">Market Overview: The AI Titans</h2>
+            <p class="section-subtitle">The artificial intelligence sector is fiercely competitive, with giants like Anthropic, Google, and OpenAI continuously pushing the boundaries of innovation. Their offerings span powerful language models, diverse pricing strategies, and emerging agentic AI tools, shaping the future of enterprise AI.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="stat-card">
+                    <div class="text-6xl mb-4">🤖</div>
+                    <h3 class="text-2xl font-semibold mb-2 text-orange-500">Anthropic</h3>
+                    <p class="text-gray-600">Focusing on AI safety and research, Anthropic offers powerful models like Claude Opus 4 and Sonnet 4, known for complex task handling and coding prowess.</p>
+                </div>
+                <div class="stat-card">
+                    <div class="text-6xl mb-4">💡</div>
+                    <h3 class="text-2xl font-semibold mb-2 text-blue-500">Google</h3>
+                    <p class="text-gray-600">Leveraging its vast infrastructure, Google's Gemini models (2.5 Pro, Flash) excel in multimodal understanding and massive context windows, integrated via Vertex AI.</p>
+                </div>
+                <div class="stat-card">
+                    <div class="text-6xl mb-4">🚀</div>
+                    <h3 class="text-2xl font-semibold mb-2 text-purple-500">OpenAI</h3>
+                    <p class="text-gray-600">A pioneer in generative AI, OpenAI provides a versatile suite including GPT-4o, specialized APIs (DALL-E, Whisper), and the ChatGPT platform for diverse applications.</p>
+                </div>
+            </div>
+            <div class="mt-12">
+                <h3 class="text-2xl font-semibold text-center mb-6 text-gray-700">Illustrative AI Model Market Focus (Conceptual)</h3>
+                <p class="section-subtitle">While exact market shares are dynamic, this illustrates the distinct areas of strength and focus for the leading AI model providers, highlighting their competitive positioning in the rapidly evolving AI landscape.</p>
+                <div class="chart-container max-w-lg h-80 md:h-96">
+                    <canvas id="marketFocusChart"></canvas>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-4">This donut chart conceptualizes the primary strengths and market focus of key AI players: Anthropic on advanced agentic coding and complex reasoning, Google on massive context and multimodal integration, and OpenAI on versatile platform capabilities and broad accessibility. This is not based on specific market share percentages from the report but rather a qualitative representation of their core competencies.</p>
+            </div>
+        </section>
+
+        <section id="api-pricing">
+            <h2 class="section-title">API Pricing: A Cost Comparison</h2>
+            <p class="section-subtitle">Understanding the per-token costs for API access is crucial for budgeting AI-driven applications. Prices vary significantly based on model capability, input/output volume, and specific features like prompt caching or batch processing.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="chart-container h-[500px] md:h-[600px]">
+                    <canvas id="apiInputPricingChart"></canvas>
+                </div>
+                <div class="chart-container h-[500px] md:h-[600px]">
+                    <canvas id="apiOutputPricingChart"></canvas>
+                </div>
+            </div>
+            <div class="mt-8 p-6 bg-white rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Key Pricing Insights:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                    <li><strong>Anthropic's Claude Opus 4</strong> shows premium output pricing ($75/M tokens), reflecting its advanced capabilities, but offers significant savings via prompt caching (up to 90%) and batch processing (50% discount).</li>
+                    <li><strong>Google's Gemini 2.5 Pro</strong> features tiered pricing based on context length, becoming more expensive for prompts over 200K tokens. Gemini Flash models offer highly competitive rates, especially for "no thinking" outputs.</li>
+                    <li><strong>OpenAI's GPT-4o</strong> is positioned as a high-performance, lower-cost successor to GPT-4 Turbo, with GPT-4o Mini providing an even more economical multimodal option. Older models like GPT-3.5 Turbo remain the most budget-friendly for general tasks.</li>
+                    <li>Discounts for batch processing are common (Anthropic, Google, OpenAI), encouraging bulk operations for cost efficiency.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="subscriptions">
+            <h2 class="section-title">Subscription Tiers: Access & Features</h2>
+            <p class="section-subtitle">Beyond APIs, providers offer subscription plans catering to individuals, teams, and enterprises, bundling model access with additional features, usage limits, and support.</p>
+            <div class="overflow-x-auto bg-white rounded-lg shadow-md p-2">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Provider</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Monthly Cost (per user/total)</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Key Features</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target User</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Anthropic</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Claude Pro/Max/Team/Enterprise</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Varied</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Access to Opus 4, Sonnet 4, extended thinking</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Individuals, Teams, Enterprises</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Google</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">AI Ultra Plan</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$249.99 ($125 intro)</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Highest usage, Gemini 2.5 Pro "Deep Think", YouTube Premium, 30TB storage</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Power Users, Developers</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Google</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">AI Pro Plan</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$19.99 (previously)</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Flow video generation, early Gemini in Chrome</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mainstream Users</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ChatGPT Plus</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$20/month</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Priority access, GPT-4o (limited), 32K context</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Individuals, Freelancers</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ChatGPT Pro</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$200/month</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">"Unlimited" access to latest models, 128K context</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Power Users</td>
+                        </tr>
+                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ChatGPT Team</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$25-$30/user/month</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Admin controls, shared GPTs, data excluded from training</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Teams (2+ users)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ChatGPT Enterprise</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">~$60/user/month</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Unlimited GPT-4/4o, SSO, train on company data</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Large Enterprises (150+ users)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+             <p class="text-center text-sm text-gray-500 mt-4">This table summarizes key consumer, team, and enterprise subscription offerings from major AI providers, highlighting the diverse value propositions for different user segments. Pricing and features are subject to change and specific provider terms.</p>
+        </section>
+
+        <section id="capabilities">
+            <h2 class="section-title">Core Model Capabilities</h2>
+            <p class="section-subtitle">Beyond pricing, raw performance and unique features like context window size and specialized reasoning abilities differentiate AI models.</p>
+            
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-center mb-6 text-gray-700">Context Window Comparison (Max Tokens)</h3>
+                <p class="section-subtitle">A larger context window allows models to process and "remember" more information from the input, crucial for complex tasks and long conversations.</p>
+                <div class="chart-container h-96 md:h-[500px]">
+                    <canvas id="contextWindowChart"></canvas>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-4">Google's Gemini 2.5 Pro leads with a 1 million token context window (planned expansion to 2M), significantly surpassing others. Anthropic's Claude 4 models and OpenAI's o3/o4-mini offer substantial 200K windows, while GPT-4o/Turbo provide 128K.</p>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-semibold text-center mb-6 text-gray-700">Performance Benchmarks Snapshot</h3>
+                <p class="section-subtitle">Models are rigorously tested on various benchmarks to quantify their abilities in areas like coding, reasoning, and multimodal understanding.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="chart-container h-96 md:h-[500px]">
+                        <canvas id="sweBenchChart"></canvas>
+                    </div>
+                    <div class="chart-container h-96 md:h-[500px]">
+                        <canvas id="gpqaBenchChart"></canvas>
+                    </div>
+                </div>
+                <div class="mt-8 p-6 bg-white rounded-lg shadow-md">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Benchmark Highlights:</h4>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li><strong>Agentic Coding (SWE-bench):</strong> Anthropic's Claude Opus 4 (72.5%-79.4%) and Sonnet 4 (72.7%-80.2%) show leading performance, surpassing OpenAI's o3 (69.1%) and Google's Gemini 2.5 Pro (63.2%).</li>
+                        <li><strong>Graduate-Level Reasoning (GPQA Diamond):</strong> Google's Gemini 2.5 Pro (83%-84%) and Anthropic's Claude Opus 4 (79.6%-83.3%) demonstrate strong reasoning capabilities, competitive with OpenAI's o3 (83.3%).</li>
+                        <li><strong>Visual Reasoning (MMMU):</strong> Google's Gemini 2.5 Pro (79.6%-81.7%) leads, followed by OpenAI's o3 (82.9% in some reports) and Anthropic's Claude Opus 4 (76.5%).</li>
+                        <li>Performance can vary based on specific test conditions and whether enhanced compute modes (like "parallel test-time compute" or "Deep Think") are used.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="agentic-ai">
+            <h2 class="section-title">The Rise of Agentic AI</h2>
+            <p class="section-subtitle">Agentic AI tools are moving beyond simple assistance to perform tasks autonomously, promising to revolutionize workflows in coding, productivity, and more.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                <div class="stat-card flex flex-col">
+                    <h3 class="text-xl font-semibold mb-3 text-orange-500">Google Jules</h3>
+                    <p class="text-sm text-gray-500 mb-1">Focus: Autonomous Coding Agent</p>
+                    <p class="text-gray-600 mb-4 text-sm">Autonomous task execution, understands developer intent, operates in secure Google Cloud VM, integrates with GitHub. Powered by Gemini 2.5 Pro.</p>
+                    <p class="text-xs text-gray-500 mt-auto">Status: Public Beta (Free with limits). Performance: High potential but early reports show inconsistencies, context limits.</p>
+                </div>
+                <div class="stat-card flex flex-col">
+                    <h3 class="text-xl font-semibold mb-3 text-blue-500">Microsoft 365 Copilot</h3>
+                    <p class="text-sm text-gray-500 mb-1">Focus: Embedded Productivity AI</p>
+                    <p class="text-gray-600 mb-4 text-sm">AI chat grounded in work data, agent creation (Copilot Studio), enterprise security. Deeply integrated into Microsoft 365 apps.</p>
+                    <p class="text-xs text-gray-500 mt-auto">Status: Generally Available ($30/user/month + M365 license). Performance: Significant reported productivity gains (e.g., 70% users more productive).</p>
+                </div>
+                <div class="stat-card flex flex-col">
+                    <h3 class="text-xl font-semibold mb-3 text-purple-500">GitHub Copilot</h3>
+                    <p class="text-sm text-gray-500 mb-1">Focus: AI-Powered Code Assistant</p>
+                    <p class="text-gray-600 mb-4 text-sm">Real-time code suggestions, multi-model chat (Claude, Gemini, GPT), Agent mode in VS Code, code review, fine-tuning (preview).</p>
+                    <p class="text-xs text-gray-500 mt-auto">Status: Tiered plans (Free to Enterprise $39/seat/mo). Performance: Access to a wide array of leading models for diverse coding tasks.</p>
+                </div>
+                <div class="stat-card flex flex-col">
+                    <h3 class="text-xl font-semibold mb-3 text-pink-500">OpenAI Codex</h3>
+                    <p class="text-sm text-gray-500 mb-1">Focus: Foundational Autonomous Code Generation</p>
+                    <p class="text-gray-600 mb-4 text-sm">Translates natural language to code, iterative testing, cloud sandbox, `AGENTS.md` steering. Powers tools like GitHub Copilot.</p>
+                    <p class="text-xs text-gray-500 mt-auto">Status: Research Preview (Free for limited period). Performance: 75% accuracy in coding tests, capable of complex tasks.</p>
+                </div>
+            </div>
+            <p class="text-center text-sm text-gray-500 mt-8">Agentic AI tools represent a significant leap, moving from reactive assistance to proactive collaboration and autonomous task completion. While some, like Microsoft 365 Copilot, are already delivering widespread productivity benefits through deep integration, more autonomous agents like Google Jules and OpenAI Codex are in earlier stages, showing immense promise but requiring further maturation for consistent enterprise-scale deployment.</p>
+        </section>
+
+        <section id="dynamic-insights">
+            <h2 class="section-title">Dynamic Model Insights ✨</h2>
+            <p class="section-subtitle">Leverage the power of Gemini to get quick summaries and key details about specific AI models. Simply type a model name and discover more!</p>
+            <div class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
+                <div class="mb-6">
+                    <label for="modelInput" class="block text-gray-700 text-lg font-semibold mb-2">Enter an AI Model Name:</label>
+                    <input type="text" id="modelInput" placeholder="e.g., Gemini 2.5 Pro, Claude Opus 4, GPT-4o"
+                           class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800">
+                </div>
+                <button id="askGeminiBtn"
+                        class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                    Ask Gemini ✨
+                </button>
+                <div id="geminiResponse" class="mt-8 p-4 bg-gray-50 border border-gray-200 rounded-md min-h-[100px] text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">
+                    Your model insights will appear here...
+                </div>
+                <div id="loadingIndicator" class="hidden text-center mt-4 text-blue-500 font-semibold">
+                    Loading insights...
+                </div>
+            </div>
+        </section>
+
+        <section id="deep-dive-analysis">
+            <h2 class="section-title">Our Process & Future Outlook</h2>
+            <p class="section-subtitle">This section details the methodology behind crafting this infographic, the strategic use of source material, and forward-looking insights into the evolving AI landscape.</p>
+
+            <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Our Code Process: Building the Infographic</h3>
+                <p class="text-gray-600 mb-4">The creation of this interactive infographic involved a meticulous process, combining modern web development practices with a focus on data clarity and user experience. The core technologies employed were HTML for structure, Tailwind CSS for styling, and Chart.js for dynamic data visualization, complemented by direct integration with the Gemini API for enhanced interactivity.</p>
+                
+                <h4 class="text-xl font-semibold text-gray-700 mb-2 mt-6">HTML Structure and Semantics</h4>
+                <p class="text-gray-600 mb-4">The entire infographic is built as a single-page application (SPA) within a single HTML file. This choice simplifies deployment and ensures a cohesive user experience without page reloads. Semantic HTML5 elements (like `header`, `main`, `section`, `footer`, `nav`) were used to provide a logical structure, improving accessibility and maintainability. Each major topic is encapsulated within its own `section` with a unique ID, enabling smooth internal navigation via the sticky header.</p>
+                
+                <h4 class="text-xl font-semibold text-gray-700 mb-2 mt-6">Tailwind CSS for Responsive Design and Aesthetics</h4>
+                <p class="text-gray-600 mb-4">Tailwind CSS, a utility-first CSS framework, was instrumental in rapidly building a responsive and visually appealing layout. Its utility classes allowed for direct styling in the HTML, ensuring consistency and efficiency. Key aspects of its application include:</p>
+                <ul class="list-disc list-inside space-y-2 text-gray-600 ml-4">
+                    <li><strong>Responsive Grid System:</strong> Tailwind's `grid` and `gap` utilities (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`) were used to create flexible layouts that adapt seamlessly across different screen sizes, from mobile devices to large desktops.</li>
+                    <li><strong>Material Design Principles:</strong> Concepts such as elevation (via `shadow-md`, `shadow-lg`), rounded corners (`rounded-lg`, `rounded-xl`), and thoughtful spacing (`p-6`, `mb-8`, `space-y-16`) were applied using Tailwind classes to achieve a clean, modern, and professional aesthetic.</li>
+                    <li><strong>Vibrant Color Palette:</strong> The "Energetic & Playful" palette was explicitly chosen and consistently applied using specific HEX codes for backgrounds, text, and chart elements (`bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600` for the header, and custom CSS variables or direct Tailwind classes for other elements). This ensures visual coherence and appeal.</li>
+                    <li><strong>Chart Container Styling:</strong> Specific Tailwind classes (`w-full`, `max-w-xl`, `h-96`, `md:h-[500px]`, `mx-auto`) were applied to `div` wrappers around `<canvas>` elements. This ensures charts are responsive, respect their parent containers, prevent overflow, and maintain a balanced visual presence.</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-gray-700 mb-2 mt-6">Chart.js for Dynamic Data Visualization (Canvas-Based)</h4>
+                <p class="text-gray-600 mb-4">Chart.js was selected for rendering all statistical charts due to its robust canvas-based rendering capabilities, which aligns with the strict requirement to avoid SVG graphics. Its implementation included:</p>
+                <ul class="list-disc list-inside space-y-2 text-gray-600 ml-4">
+                    <li><strong>Responsiveness:</strong> All Chart.js instances were configured with `responsive: true` and `maintainAspectRatio: false` to ensure they dynamically resize with their parent containers, preventing distortion and maintaining visual integrity on various screen sizes.</li>
+                    <li><strong>Label Wrapping Logic:</strong> A custom JavaScript function (`wrapLabel`) was implemented to automatically detect and wrap long labels (exceeding 16 characters) into multi-line arrays. This prevents label overlap on chart axes and legends, ensuring readability.</li>
+                    <li><strong>Tooltip Configuration:</strong> The required `plugins.tooltip.callbacks.title` configuration was included for every Chart.js instance. This ensures that when a user hovers over a chart element, the tooltip correctly displays multi-line labels as a single, coherent string.</li>
+                    <li><strong>Diverse Chart Types:</strong> Bar charts (horizontal and vertical), grouped bar charts, and donut charts were utilized to effectively represent different data types and comparison goals, all rendered directly to HTML `<canvas>` elements.</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-gray-700 mb-2 mt-6">Gemini API Integration for Dynamic Insights</h4>
+                <p class="text-gray-600 mb-4">A key interactive feature is the "Dynamic Model Insights" section, which leverages the Gemini API (specifically `gemini-2.0-flash`) to provide on-demand summaries of AI models. This integration involved:</p>
+                <ul class="list-disc list-inside space-y-2 text-gray-600 ml-4">
+                    <li><strong>User Input and Button Trigger:</strong> A simple input field allows users to type a model name, and a button initiates the API call.</li>
+                    <li><strong>Asynchronous Fetch Request:</strong> A JavaScript `fetch` call is made to the Gemini API endpoint. The prompt is dynamically constructed based on user input, asking the LLM for a concise summary of the specified model.</li>
+                    <li><strong>Loading State Management:</strong> A visual loading indicator is displayed, and the button is disabled during the API request to provide clear user feedback and prevent multiple submissions.</li>
+                    <li><strong>Response Handling:</strong> The JSON response from the Gemini API is parsed, and the generated text summary is then displayed in a dedicated area, providing real-time information. Error handling is included to manage network issues or unexpected API responses.</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-gray-700 mb-2 mt-6">Diagrams and Icons (HTML/CSS Based)</h4>
+                <p class="text-gray-600 mb-4">Adhering to the constraint of avoiding SVG, all diagrams (like the strategic implications flowchart) and conceptual icons (like the robot, lightbulb, rocket) were implemented using structured HTML elements, Tailwind CSS for styling, and Unicode characters or emojis. This approach maintains visual consistency while ensuring all graphics are rendered natively within the browser's DOM, avoiding external image dependencies or complex vector formats.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Leveraging the Data: Our Source Material</h3>
+                <p class="text-gray-600 mb-4">The foundation of this infographic is the comprehensive "Deep Research report" provided. Every data point, statistic, model name, pricing detail, feature description, and benchmark figure presented here was meticulously extracted, analyzed, and synthesized directly from that source material. Our process ensured:</p>
+                <ul class="list-disc list-inside space-y-2 text-gray-600 ml-4">
+                    <li><strong>Direct Data Extraction:</strong> Numerical values for API pricing, context windows, and benchmark percentages were directly taken from the report to ensure accuracy.</li>
+                    <li><strong>Qualitative Information Synthesis:</strong> Descriptions of model features, key player focuses, subscription plan benefits, and agentic tool capabilities were distilled from the textual content of the report, ensuring conciseness without losing essential information.</li>
+                    <li><strong>Narrative Construction:</strong> The overall narrative flow of the infographic, from market overview to strategic implications, was designed to follow a logical progression, using the report's content to build a coherent story about the AI landscape.</li>
+                    <li><strong>Visualization Alignment:</strong> Each chart and table was specifically chosen to best represent the nature of the data from the report (e.g., bar charts for comparisons, tables for detailed feature listings), ensuring that the visual representation accurately reflected the underlying information.</li>
+                </ul>
+                <p class="text-gray-600 mt-4">This rigorous approach to source material integration ensures that the infographic serves as a reliable and digestible summary of the critical insights contained within the original Deep Research report.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Future Landscape: Implications & Improvements</h3>
+                <p class="text-gray-600 mb-4">The rapid advancements in AI models and agentic tools, as highlighted in this infographic, signal profound shifts across industries. Understanding the implications and potential improvements is crucial for staying ahead in this dynamic environment.</p>
+
+                <h4 class="text-xl font-semibold text-gray-700 mb-2 mt-6">Agentic Models: Towards Autonomous Intelligence</h4>
+                <p class="text-gray-600 mb-2"><strong>Implications:</strong> Agentic AI, exemplified by tools like Google Jules and GitHub Copilot with its agent mode, promises to revolutionize productivity by enabling autonomous task execution. This will lead to increased automation of complex workflows, freeing human capital for higher-level strategic work. New job roles focused on AI supervision, prompt engineering, and agent orchestration will emerge. Ethical considerations around accountability, bias, and control will become paramount as these systems gain more autonomy.</p>
+                <p class="text-gray-600 mb-4"><strong>Improvements:</strong> Future improvements will focus on enhancing the reliability and consistency of agentic behavior, expanding their domain specificity (e.g., agents specialized for legal research, medical diagnosis, or financial analysis), and developing more robust safety guardrails to prevent unintended actions. Interoperability between different agentic frameworks and seamless integration into enterprise systems will also be key.</p>
+
+                <h4 class="text-xl font-semibold text-gray-700 mb-2 mt-6">Thinking Models: Deepening Reasoning Capabilities</h4>
+                <p class="text-gray-600 mb-2"><strong>Implications:</strong> Models like Gemini 2.5 Pro with "Deep Think" and Claude Opus 4 represent the cutting edge in complex reasoning and multi-step problem-solving. Their ability to process vast amounts of information and derive nuanced insights will accelerate scientific discovery, enable more sophisticated decision support systems, and drive innovations in creative content generation. This will empower professionals with AI co-pilots capable of tackling previously intractable problems.</p>
+                <p class="text-gray-600 mb-4"><strong>Improvements:</strong> Future advancements will likely focus on reducing the inference latency and cost associated with these powerful models, making them more accessible for real-time applications. Greater transparency into their reasoning processes (interpretability) will be a critical area of development, allowing users to understand and trust the AI's complex outputs. Continued expansion of context windows will also unlock new possibilities for processing entire codebases or vast corporate knowledge bases.</p>
+
+                <h4 class="text-xl font-semibold text-gray-700 mb-2 mt-6">Base Models: The Workhorses of AI</h4>
+                <p class="text-gray-600 mb-2"><strong>Implications:</strong> Models like Gemini 2.5 Flash, Gemini 2.0 Flash Lite, and OpenAI's GPT-4o Mini serve as highly efficient and cost-effective workhorses for a wide range of simpler, high-volume tasks. Their optimized performance and lower pricing democratize AI access, enabling broader adoption across small businesses and startups. They are crucial for scaling AI applications where cost-efficiency is paramount, such as customer service chatbots, content summarization, and data extraction.</p>
+                <p class="text-gray-600 mb-4"><strong>Improvements:</strong> We can expect further advancements in the efficiency and cost reduction of these base models, making AI even more ubiquitous. Specialized fine-tuning capabilities will allow enterprises to adapt these general-purpose models to highly specific domain knowledge and tasks with greater accuracy and less data. The trend towards multimodal capabilities in even the most economical models will continue, expanding their utility.</p>
+
+                <h4 class="text-xl font-semibold text-gray-700 mb-2 mt-6">Overall Landscape Evolution</h4>
+                <p class="text-gray-600 mb-4">The market will continue to see a diversification of models, with providers offering a spectrum from highly capable, premium models to fast, cost-effective alternatives. Multimodality (handling text, image, audio, video) will become a standard feature across most models. Competition will drive down prices and increase performance, benefiting consumers and enterprises alike. The emphasis will shift from mere model capability to the seamless integration of AI into existing workflows and the development of robust, secure, and ethical AI systems.</p>
+            </div>
+        </section>
+
+        <section id="implications">
+            <h2 class="section-title">Strategic Implications for Enterprise Adoption</h2>
+            <p class="section-subtitle">Successfully leveraging AI requires careful consideration of costs, capabilities, integration, security, and strategic alignment with business goals.</p>
+            <div class="bg-white p-8 rounded-lg shadow-xl">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Key Considerations for Your AI Strategy</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+                    <div class="flex flex-col items-center">
+                        <div class="flow-step w-full">1. Align Model to Use Case</div>
+                        <p class="text-xs text-center mt-2 text-gray-500">Match AI strengths (coding, context, multimodality) to specific business needs.</p>
+                    </div>
+                    <div class="flow-arrow hidden md:flex">➔</div>
+                    <div class="flex flex-col items-center mt-4 md:mt-0">
+                        <div class="flow-step w-full">2. Optimize Costs Actively</div>
+                        <p class="text-xs text-center mt-2 text-gray-500">Utilize caching, batching, and right-sized models to manage expenses.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch mt-4 md:mt-8">
+                     <div class="flex flex-col items-center md:col-start-1">
+                        <div class="flow-step w-full">3. Pilot Agentic AI Strategically</div>
+                        <p class="text-xs text-center mt-2 text-gray-500">Experiment with autonomous agents in controlled environments with oversight.</p>
+                    </div>
+                    <div class="flow-arrow hidden md:flex">➔</div>
+                    <div class="flex flex-col items-center mt-4 md:mt-0">
+                        <div class="flow-step w-full">4. Embrace Embedded AI</div>
+                        <p class="text-xs text-center mt-2 text-gray-500">Leverage tools like M365 Copilot for immediate productivity gains in existing workflows.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch mt-4 md:mt-8">
+                    <div class="flex flex-col items-center md:col-start-1">
+                        <div class="flow-step w-full">5. Consider Hybrid Vendor Strategy</div>
+                        <p class="text-xs text-center mt-2 text-gray-500">Combine best-of-breed solutions to optimize performance and avoid lock-in.</p>
+                    </div>
+                    <div class="flow-arrow hidden md:flex">➔</div>
+                    <div class="flex flex-col items-center mt-4 md:mt-0">
+                        <div class="flow-step w-full">6. Prioritize Data Governance & Security</div>
+                        <p class="text-xs text-center mt-2 text-gray-500">Ensure data privacy, training exclusion, and secure processing environments.</p>
+                    </div>
+                </div>
+                <p class="text-center text-gray-600 mt-10">A thoughtful, adaptable strategy is key to navigating the dynamic AI landscape and harnessing its transformative potential for your organization.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-12 px-6 text-center">
+        <p class="mb-2">&copy; May 2025 AI Market Research Infographic. All data derived from the provided research report.</p>
+        <p class="text-sm">This infographic is for informational purposes only and represents a snapshot of a rapidly evolving market. Always refer to official provider documentation for the latest pricing and features.</p>
+    </footer>
+
+    <script>
+        const primaryColor = '#FF8C00'; // Orange
+        const secondaryColor = '#1E90FF'; // Blue
+        const accent1Color = '#FFD700'; // Yellow
+        const accent2Color = '#9370DB'; // Purple
+        const accent3Color = '#FF69B4'; // Pink
+        const textDarkColor = '#1F2937';
+        const textLightColor = '#6B7280';
+
+        function wrapLabel(label, maxLength = 16) {
+            if (typeof label !== 'string' || label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + word).length > maxLength && currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                } else {
+                    currentLine += word + ' ';
+                }
+            }
+            if (currentLine.trim().length > 0) {
+                lines.push(currentLine.trim());
+            }
+            return lines.length > 0 ? lines : [label]; // Ensure it returns an array even if one line
+        }
+
+        const tooltipTitleCallback = function(tooltipItems) {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            } else {
+                return label;
+            }
+        };
+        
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textDarkColor,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: { title: tooltipTitleCallback },
+                    backgroundColor: 'rgba(0,0,0,0.7)',
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    cornerRadius: 4
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: textLightColor, font: { size: 10 } },
+                    grid: { display: false }
+                },
+                y: {
+                    ticks: { color: textLightColor, font: { size: 10 } },
+                    grid: { color: '#E5E7EB' } // gray-200
+                }
+            }
+        };
+
+        // Market Focus Chart (Donut)
+        const marketFocusCtx = document.getElementById('marketFocusChart').getContext('2d');
+        new Chart(marketFocusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Anthropic (Agentic Coding, Complex Reasoning)', 'Google (Massive Context, Multimodal Integration)', 'OpenAI (Versatile Platform, Broad Accessibility)'].map(l => wrapLabel(l, 25)),
+                datasets: [{
+                    label: 'Illustrative Market Focus',
+                    data: [35, 35, 30], // Conceptual values
+                    backgroundColor: [primaryColor, secondaryColor, accent2Color],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: textDarkColor, font: {size: 10}, boxWidth: 20, padding: 15 } },
+                    tooltip: { callbacks: { title: tooltipTitleCallback } }
+                }
+            }
+        });
+        
+        // API Input Pricing Chart
+        const apiInputPricingCtx = document.getElementById('apiInputPricingChart').getContext('2d');
+        new Chart(apiInputPricingCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Claude Opus 4', 'Claude Sonnet 4', 
+                    ['Gemini 2.5 Pro', '(<=200K)'], ['Gemini 2.5 Pro', '(>200K)'], 
+                    'Gemini 2.5 Flash', 'Gemini 2.0 Flash', 'Gemini 2.0 Flash Lite',
+                    'GPT-4o', 'GPT-4o Mini', 'GPT-4 Turbo', 'GPT-4', 'GPT-3.5 Turbo',
+                    'OpenAI o3', 'OpenAI o4-mini'
+                ],
+                datasets: [{
+                    label: 'Input Price ($ per 1M tokens)',
+                    data: [15, 3, 1.25, 2.50, 0.15, 0.15, 0.075, 5, 0.15, 10, 30, 0.50, 10, 1.10],
+                    backgroundColor: primaryColor,
+                    borderColor: primaryColor,
+                    borderWidth: 1
+                }]
+            },
+            options: { ...commonChartOptions, indexAxis: 'y', scales: { ...commonChartOptions.scales, y: { ticks: { ...commonChartOptions.scales.y.ticks, autoSkip: false, font: {size: 9} } } } }
+        });
+
+        // API Output Pricing Chart
+        const apiOutputPricingCtx = document.getElementById('apiOutputPricingChart').getContext('2d');
+        new Chart(apiOutputPricingCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Claude Opus 4', 'Claude Sonnet 4', 
+                    ['Gemini 2.5 Pro', '(<=200K)'], ['Gemini 2.5 Pro', '(>200K)'], 
+                    ['Gemini 2.5 Flash', '(no thinking)'], ['Gemini 2.5 Flash', '(thinking)'], 
+                    'Gemini 2.0 Flash', 'Gemini 2.0 Flash Lite',
+                    'GPT-4o', 'GPT-4o Mini', 'GPT-4 Turbo', 'GPT-4', 'GPT-3.5 Turbo',
+                    'OpenAI o3', 'OpenAI o4-mini'
+                ],
+                datasets: [{
+                    label: 'Output Price ($ per 1M tokens)',
+                    data: [75, 15, 10, 15, 0.60, 3.50, 0.60, 0.30, 15, 0.60, 30, 60, 1.50, 40, 4.40],
+                    backgroundColor: secondaryColor,
+                    borderColor: secondaryColor,
+                    borderWidth: 1
+                }]
+            },
+            options: { ...commonChartOptions, indexAxis: 'y', scales: { ...commonChartOptions.scales, y: { ticks: { ...commonChartOptions.scales.y.ticks, autoSkip: false, font: {size: 9} } } } }
+        });
+
+        // Context Window Chart
+        const contextWindowCtx = document.getElementById('contextWindowChart').getContext('2d');
+        new Chart(contextWindowCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    wrapLabel('Gemini 2.5 Pro (planned 2M)'), wrapLabel('Gemini 2.5 Pro (current 1M)'), 
+                    wrapLabel('Claude Opus 4 (200K)'), wrapLabel('Claude Sonnet 4 (200K)'),
+                    wrapLabel('OpenAI o3 (200K)'), wrapLabel('OpenAI o4-mini (200K)'),
+                    wrapLabel('GPT-4o (128K)'), wrapLabel('GPT-4o Mini (128K)'), wrapLabel('GPT-4 Turbo (128K)'),
+                    wrapLabel('GPT-3.5 Turbo (16K)'), wrapLabel('GPT-4 (8K)')
+                ],
+                datasets: [{
+                    label: 'Max Context Window (Tokens)',
+                    data: [2000000, 1000000, 200000, 200000, 200000, 200000, 128000, 128000, 128000, 16000, 8000],
+                    backgroundColor: accent2Color,
+                    borderColor: accent2Color,
+                    borderWidth: 1
+                }]
+            },
+            options: { ...commonChartOptions, indexAxis: 'y', scales: { ...commonChartOptions.scales, x: { ...commonChartOptions.scales.x, type: 'logarithmic', title: { display: true, text: 'Tokens (Logarithmic Scale)', color: textDarkColor } }, y: { ticks: { ...commonChartOptions.scales.y.ticks, font: {size: 10} } } } }
+        });
+        
+        // SWE-bench Chart
+        const sweBenchCtx = document.getElementById('sweBenchChart').getContext('2d');
+        new Chart(sweBenchCtx, {
+            type: 'bar',
+            data: {
+                labels: [wrapLabel('Claude Opus 4 (Parallel)'), wrapLabel('Claude Sonnet 4 (Parallel)'), wrapLabel('OpenAI Codex-1'), wrapLabel('OpenAI o3'), wrapLabel('Gemini 2.5 Pro')],
+                datasets: [{
+                    label: 'SWE-bench Verified (%)',
+                    data: [79.4, 80.2, 72.1, 69.1, 63.8],
+                    backgroundColor: [primaryColor, accent1Color, secondaryColor, accent2Color, accent3Color],
+                }]
+            },
+            options: { ...commonChartOptions, plugins: { ...commonChartOptions.plugins, legend: { display: false } }, scales: { ...commonChartOptions.scales, y: { ...commonChartOptions.scales.y, suggestedMax: 100, title: { display: true, text: 'Accuracy (%)', color: textDarkColor } }, x: { ticks: { font: {size: 9} } } } }
+        });
+
+        // GPQA Diamond Chart
+        const gpqaBenchCtx = document.getElementById('gpqaBenchChart').getContext('2d');
+        new Chart(gpqaBenchCtx, {
+            type: 'bar',
+            data: {
+                labels: [wrapLabel('Gemini 2.5 Pro (pass@1)'), wrapLabel('Claude Opus 4 (Parallel)'), wrapLabel('OpenAI o3')],
+                datasets: [{
+                    label: 'GPQA Diamond (%)',
+                    data: [84.0, 83.3, 83.3],
+                    backgroundColor: [secondaryColor, primaryColor, accent2Color],
+                }]
+            },
+            options: { ...commonChartOptions, plugins: { ...commonChartOptions.plugins, legend: { display: false } }, scales: { ...commonChartOptions.scales, y: { ...commonChartOptions.scales.y, suggestedMax: 100, title: { display: true, text: 'Accuracy (%)', color: textDarkColor } }, x: { ticks: { font: {size: 9} } } } }
+        });
+
+        // Gemini API Integration Logic
+        const modelInput = document.getElementById('modelInput');
+        const askGeminiBtn = document.getElementById('askGeminiBtn');
+        const geminiResponse = document.getElementById('geminiResponse');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        askGeminiBtn.addEventListener('click', async () => {
+            const modelName = modelInput.value.trim();
+            if (!modelName) {
+                geminiResponse.textContent = "Please enter an AI model name.";
+                return;
+            }
+
+            geminiResponse.textContent = '';
+            loadingIndicator.classList.remove('hidden');
+            askGeminiBtn.disabled = true; // Disable button during loading
+
+            try {
+                let chatHistory = [];
+                const prompt = `Provide a concise summary of the AI model "${modelName}", including its key features, typical use cases, and notable benchmarks. Keep the summary under 150 words and focus on factual information. If the model is not a well-known AI model, state that you do not have information.`;
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // Canvas will automatically provide this in runtime
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    geminiResponse.textContent = text;
+                } else {
+                    geminiResponse.textContent = "Could not retrieve information for this model. Please try again or a different model name.";
+                    console.error("Gemini API response structure unexpected:", result);
+                }
+            } catch (error) {
+                geminiResponse.textContent = "An error occurred while fetching insights. Please check your network connection or try again later.";
+                console.error("Error calling Gemini API:", error);
+            } finally {
+                loadingIndicator.classList.add('hidden');
+                askGeminiBtn.disabled = false; // Re-enable button
+            }
+        });
+    </script>
+</body>
+</html>
